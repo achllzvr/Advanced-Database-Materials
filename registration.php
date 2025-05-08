@@ -1,52 +1,42 @@
 <?php
-
-require_once 'database.php';
+require_once('classes/database.php');
 $con = new database();
 $sweetAlertConfig="";
 
-if (isset($_POST['register'])) {
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    if($userID){
-      $sweetAlertConfig = "
-
-      <script>
-      
-      Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful',
-        text: 'Username already exists!'
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = 'login.php';
-      });
-
-      </script>
-      
-      ";
-    }else{
-      $sweetAlertConfig = "
-
-      <script>
-      
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: 'Username already exists!'
-        confirmButtonText: 'OK'
-      }).then(() => {
-        window.location.href = 'registration.php';
-      });
-
-      </script>
-      
-      ";
-    }
-
-}
+if(isset($_POST['register'])){
+  $username = $_POST['username'];
+  $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+  $firstname = $_POST['first_name'];
+  $lastname = $_POST['last_name'];
+  $userID = $con->signupUser($firstname, $lastname ,$username, $password);
+  
+  if($userID){
+    $sweetAlertConfig = "
+    <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Registration Successful',
+      text: 'Your account has been created successfully',
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = 'login.html';
+      }
+    });
+    </script>";
+  } else {
+    $sweetAlertConfig = "
+    <script>
+    Swal.fire({
+      icon: 'error',
+      title: 'Registration Failed',
+      text: 'Please try again later',
+      confirmButtonText: 'OK'
+    });
+    </script>";
+  }
+  
+  }
 
 ?>
 
@@ -85,5 +75,8 @@ if (isset($_POST['register'])) {
 
   <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
   <script src="./package/dist/sweetalert2.js"></script>
+
+  <?php echo $sweetAlertConfig ?>
+
 </body>
 </html>
