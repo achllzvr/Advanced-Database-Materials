@@ -9,4 +9,8 @@ class database{
             username: 'root',
             password: '');
         }
+
+        function signupUser($first_name, $last_name, $username, $password){
+            return false;
+        }
     }

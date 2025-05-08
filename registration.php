@@ -1,3 +1,55 @@
+<?php
+
+require_once 'database.php';
+$con = new database();
+$sweetAlertConfig="";
+
+if (isset($_POST['register'])) {
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if($userID){
+      $sweetAlertConfig = "
+
+      <script>
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Registration Successful',
+        text: 'Username already exists!'
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'login.php';
+      });
+
+      </script>
+      
+      ";
+    }else{
+      $sweetAlertConfig = "
+
+      <script>
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: 'Username already exists!'
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'registration.php';
+      });
+
+      </script>
+      
+      ";
+    }
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
