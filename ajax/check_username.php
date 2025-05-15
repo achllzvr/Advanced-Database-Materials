@@ -13,12 +13,12 @@ if(isset($_POST['username'])) {
     if($con->isUsernameExists($username)) {
 
         // If the username exists, return a JSON response of true
-        echo json_encode((['exists' => true]));
+        echo json_encode((['exists'=>true]));
 
     } else {
 
         // If the username does not exist, return a JSON response of false
-        echo json_encode((['exists' => false]));
+        echo json_encode((['exists'=>false]));
 
     }
 
@@ -26,6 +26,6 @@ if(isset($_POST['username'])) {
 } else {
 
     // If the username is not set, return an error message
-    echo json_encode(['error' => 'Invalid Request']);
+    echo json_encode(['error'=>'Invalid Request']);
 
 }

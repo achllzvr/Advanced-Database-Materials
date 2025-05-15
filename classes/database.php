@@ -4,7 +4,7 @@ class database{
 
     function opencon(){
         return new PDO( 
-   'mysql:host=localhost; 
+        'mysql:host=127.0.0.1; 
         dbname=dbs_app',   
         username: 'root', 
         password: '');
@@ -27,6 +27,7 @@ class database{
             $con->rollBack();
             return false;
         }
+
     }
 
     // Check if username exists
@@ -45,6 +46,5 @@ class database{
         // Check if the count is greater than 0 and return true if greater than zero, else false
         return $count > 0;
     }
-
 
 }

@@ -1,3 +1,46 @@
+<?php
+    require_once('classes/database.php');
+    $con = new database();
+
+    $sweetAlertConfig = "";
+
+    if (isset($_POST['register'])){
+     
+      $username = $_POST['username'];
+      $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+      $firstname = $_POST['first_name'];
+      $lastname = $_POST['last_name'];
+
+      $userID = $con->signupUser($username, $password, $firstname, $lastname);
+      
+      if ($userID) {
+        $sweetAlertConfig = "
+        <script>
+        Swal.fire({
+          icon: 'success',
+          title: 'Registration Successful',
+          text: 'You have successfully registered as an admin.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = 'login.html';
+        });
+        </script>
+        ";
+      } else {
+        $sweetAlertConfig = "
+         <script>
+        Swal.fire({
+          icon: 'error',
+          title: 'Registration Failed',
+          text: 'An error occurred during registration. Please try again.',
+          confirmButtonText: 'OK'
+        });
+        </script>"
+        
+        ;
+      }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,13 +74,16 @@
         <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
         <div class="invalid-feedback">Password must be at least 6 characters long, include an uppercase letter, a number, and a special character.</div>      
       </div>
-      <button type="submit" class="btn btn-primary w-100">Register</button>
+      <button type="submit" name='register' class="btn btn-primary w-100">Register</button>
     </form>
   </div>
   
   <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
   <script src="./package/dist/sweetalert2.js"></script>
+  <?php echo $sweetAlertConfig; ?>
+
   <script>
+    
   // Function to validate individual fields
   function validateField(field, validationFn) {
     field.addEventListener('input', () => {
