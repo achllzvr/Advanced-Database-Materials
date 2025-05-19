@@ -10,14 +10,14 @@ class database{
         password: '');
     }
 
-    function signupUser($username, $password, $firstname, $lastname){
+    function signupUser($username, $password, $firstname, $lastname, $email){
         $con = $this->opencon();
 
         try{
             $con->beginTransaction();
 
-            $stmt = $con->prepare("INSERT INTO Admin (admin_FN, admin_LN, admin_username, admin_password) VALUES (?,?,?,?)");
-            $stmt->execute([$firstname, $lastname, $username,$password]);
+            $stmt = $con->prepare("INSERT INTO Admin (admin_FN, admin_LN, admin_username, admin_email, admin_password) VALUES (?,?,?,?,?)");
+            $stmt->execute([$firstname, $lastname, $username, $email, $password]);
 
             $userID = $con->lastInsertId();
             $con->commit();
@@ -39,6 +39,23 @@ class database{
         $stmt = $con->prepare("SELECT COUNT(*) FROM Admin WHERE admin_username = ?");
         // Executes the statement
         $stmt->execute([$username]);
+
+        // Fetch the count of rows and its values and assign to $count
+        $count = $stmt->fetchColumn();
+
+        // Check if the count is greater than 0 and return true if greater than zero, else false
+        return $count > 0;
+    }
+
+    // Check if Email exists
+    function isEmailExists($email){
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to check if username exists
+        $stmt = $con->prepare("SELECT COUNT(*) FROM Admin WHERE admin_email = ?");
+        // Executes the statement
+        $stmt->execute([$email]);
 
         // Fetch the count of rows and its values and assign to $count
         $count = $stmt->fetchColumn();
