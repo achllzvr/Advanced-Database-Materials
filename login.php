@@ -21,7 +21,7 @@ $con = new database();
 // Initialize a variable to hold the SweetAlert configuration
 $sweetAlertConfig = "";
 
-// Check if the login form is submitted
+  // Check if the login form is submitted
   if(isset($_POST['login'])) {
 
     // Get the username and password from the POST request

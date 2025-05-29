@@ -12,6 +12,27 @@ if (!isset($_SESSION['admin_ID'])) {
 
 }
 
+// Initialize a variable to hold the SweetAlert configuration
+$sweetAlertConfig = "";
+
+// Check if the logout button is clicked
+  if(isset($_POST['logout'])) {
+
+    // Set SweetAlert configuration for logout success
+    $sweetAlertConfig = "
+    <script>
+      Swal.fire({
+        icon: 'success',
+        title: 'Logout Successful',
+        text: 'You have been logged out successfully.',
+        confirmButtonText: 'Login Again'
+      }).then(() => {
+        window.location.href = 'logout.php';
+      });
+    </script>";
+
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +44,9 @@ if (!isset($_SESSION['admin_ID'])) {
 <body class="bg-light">
   <div class="container py-5">
     <h2 class="mb-4 text-center">Student Records</h2>
+    <form id="logoutForm" method="POST" action="logout.php" class="text-end mb-4">
+      <button type="submit" name="logout" class="btn btn-danger">Logout</button>
+    </form>
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">Add New Student</button>
     <table class="table table-bordered table-hover bg-white">
       <thead class="table-dark">
