@@ -64,4 +64,30 @@ class database{
         return $count > 0;
     }
 
+    function loginUser($username, $password){
+
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to check if username exists
+        $stmt = $con->prepare("SELECT * FROM Admin WHERE admin_username = ?");
+        // Executes the statement
+        $stmt->execute([$username]);
+
+        // Fetch the user data
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verify password if user exists
+        // If user exists and password matches, return user data
+        if($user && password_verify($password, $user['admin_password'])) {
+            // If password matches, return user data
+            return $user;
+        } else {
+            // If user does not exist or password does not match, return false
+            return false;
+        }
+
+    }
+
+    // Function to login user
 }
