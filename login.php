@@ -3,6 +3,15 @@
 // Start the session
 session_start();
 
+// Checks if there is a user logged in
+if (isset($_SESSION['admin_ID'])) {
+  
+  // If not logged in, redirect to login page
+  header("Location: index.php");
+  exit();
+
+}
+
 // Include the database class file
 require_once('classes/database.php');
 
@@ -14,7 +23,6 @@ $sweetAlertConfig = "";
 
 // Check if the login form is submitted
   if(isset($_POST['login'])) {
-    echo 'form submitted';
 
     // Get the username and password from the POST request
     $username = $_POST['username'];

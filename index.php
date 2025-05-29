@@ -1,8 +1,17 @@
 <?php
-    require_once('classes/database.php');
-    $con = new database();
 
-    $data = $con->opencon();
+// Start the session
+session_start();
+
+// Checks if there is a user logged in
+if (!isset($_SESSION['admin_ID'])) {
+  
+  // If not logged in, redirect to login page
+  header("Location: login.php");
+  exit();
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
