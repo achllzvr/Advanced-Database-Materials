@@ -110,5 +110,25 @@ class database{
 
     }
 
+    function addCourse($coursename, $admin_id){
+        $con = $this->opencon();
+
+        try{
+            $con->beginTransaction();
+
+            $stmt = $con->prepare("INSERT INTO courses (course_name, admin_id) VALUES (?,?)");
+            $stmt->execute([$coursename, $admin_id]);
+
+            $userID = $con->lastInsertId();
+            $con->commit();
+
+            return $userID;   
+        }catch (PDOException $e){
+            $con->rollBack();
+            return false;
+        }
+
+    }
+
     
 }

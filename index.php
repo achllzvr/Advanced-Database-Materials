@@ -77,6 +77,42 @@ if (isset($_POST['add_student'])){
       }
     }
 
+// Check if add student has been clicked
+if (isset($_POST['add_course'])){
+     
+      $coursename = $_POST['course_name'];
+      $admin_id = $_SESSION['admin_ID'];
+
+      $userID = $con->addCourse($coursename, $admin_id);
+      
+      if ($userID) {
+        $sweetAlertConfig = "
+        <script>
+        Swal.fire({
+          icon: 'success',
+          title: 'Course Added Successfully',
+          text: 'You have successfully added a course.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = 'index.php';
+        });
+        </script>
+        ";
+      } else {
+        $sweetAlertConfig = "
+         <script>
+        Swal.fire({
+          icon: 'error',
+          title: 'Course wasn't added',
+          text: 'An error occurred while adding the course. Please try again.',
+          confirmButtonText: 'OK'
+        });
+        </script>"
+        
+        ;
+      }
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -193,7 +229,7 @@ if (isset($_POST['add_student'])){
   <!-- Add Course Modal -->
   <div class="modal fade" id="addCourseModal" tabindex="-1">
     <div class="modal-dialog">
-      <form class="modal-content" method="POST" action="add_course.php">
+      <form class="modal-content" method="POST" action="">
         <div class="modal-header">
           <h5 class="modal-title">Add Course</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -202,8 +238,13 @@ if (isset($_POST['add_student'])){
           <input type="text" name="course_name" class="form-control mb-2" placeholder="Course Name" required>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Add Course</button>
+          <button type="submit" name="add_course" class="btn btn-success">Add Course</button>
         </div>
+
+      <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
+      <script src="./package/dist/sweetalert2.js"></script>
+      <?php echo $sweetAlertConfig; ?>
+
       </form>
     </div>
   </div>
