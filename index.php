@@ -240,6 +240,7 @@ if (isset($_POST['add_course'])){
         </div>
         <div class="modal-body">
           <input type="text" name="course_name" id="course_name" class="form-control mb-2" placeholder="Course Name" required>
+          <div class="invalid-feedback">Course name is required.</div>
         </div>
         <div class="modal-footer">
           <button type="submit" id="course_button" name="add_course" class="btn btn-success">Add Course</button>
