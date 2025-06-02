@@ -3,7 +3,7 @@
 // Start the session
 session_start();
 
-// Checks if there is a user logged in
+/* Checks if there is a user logged in
 if (!isset($_SESSION['admin_ID'])) {
   
   // If not logged in, redirect to login page
@@ -11,11 +11,16 @@ if (!isset($_SESSION['admin_ID'])) {
   exit();
 
 }
+*/
+
+// Connect to Database
+require_once('classes/database.php');
+$con = new database();
 
 // Initialize a variable to hold the SweetAlert configuration
 $sweetAlertConfig = "";
 
-// Check if the logout button is clicked
+/* Check if the logout button is clicked
   if(isset($_POST['logout'])) {
 
     // Set SweetAlert configuration for logout success
@@ -32,14 +37,55 @@ $sweetAlertConfig = "";
     </script>";
 
   }
+*/
+
+// Check if add student has been clicked
+if (isset($_POST['add_student'])){
+     
+      $firstname = $_POST['first_name'];
+      $lastname = $_POST['last_name'];
+      $email = $_POST['email'];
+      $admin_id = $_SESSION['admin_ID'];
+
+      $userID = $con->addStudent($firstname, $lastname, $email, $admin_id);
+      
+      if ($userID) {
+        $sweetAlertConfig = "
+        <script>
+        Swal.fire({
+          icon: 'success',
+          title: 'Student Added Successfully',
+          text: 'You have successfully added a student.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = 'index.php';
+        });
+        </script>
+        ";
+      } else {
+        $sweetAlertConfig = "
+         <script>
+        Swal.fire({
+          icon: 'error',
+          title: 'Student wasn't added',
+          text: 'An error occurred while adding the student. Please try again.',
+          confirmButtonText: 'OK'
+        });
+        </script>"
+        
+        ;
+      }
+    }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Student & Course CRUD (PHP PDO)</title>
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
+  <link rel="stylesheet" href="./package/dist/sweetalert2.css">
 </head>
 <body class="bg-light">
   <div class="container py-5">
@@ -122,7 +168,7 @@ $sweetAlertConfig = "";
   <!-- Add Student Modal -->
   <div class="modal fade" id="addStudentModal" tabindex="-1">
     <div class="modal-dialog">
-      <form class="modal-content" method="POST" action="create.php">
+      <form class="modal-content" method="POST" action="">
         <div class="modal-header">
           <h5 class="modal-title">Add Student</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -131,11 +177,15 @@ $sweetAlertConfig = "";
           <input type="text" name="first_name" class="form-control mb-2" placeholder="First Name" required>
           <input type="text" name="last_name" class="form-control mb-2" placeholder="Last Name" required>
           <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
-          <input type="text" name="course" class="form-control" placeholder="Course">
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="submit" name="add_student" class="btn btn-primary">Add</button>
         </div>
+
+      <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
+      <script src="./package/dist/sweetalert2.js"></script>
+      <?php echo $sweetAlertConfig; ?>
+
       </form>
     </div>
   </div>

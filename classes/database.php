@@ -64,6 +64,7 @@ class database{
         return $count > 0;
     }
 
+    // Function to login user
     function loginUser($username, $password){
 
         // Open connection with database
@@ -89,5 +90,25 @@ class database{
 
     }
 
-    // Function to login user
+    function addStudent($firstname, $lastname, $email, $admin_id){
+        $con = $this->opencon();
+
+        try{
+            $con->beginTransaction();
+
+            $stmt = $con->prepare("INSERT INTO students (student_FN, student_LN, student_email, admin_id) VALUES (?,?,?,?)");
+            $stmt->execute([$firstname, $lastname, $email, $admin_id]);
+
+            $userID = $con->lastInsertId();
+            $con->commit();
+
+            return $userID;   
+        }catch (PDOException $e){
+            $con->rollBack();
+            return false;
+        }
+
+    }
+
+    
 }
