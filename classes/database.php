@@ -130,5 +130,22 @@ class database{
 
     }
 
+    // Check if Email exists
+    function isCourseExists($course_name){
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to check if username exists
+        $stmt = $con->prepare("SELECT COUNT(*) FROM courses WHERE course_name = ?");
+        // Executes the statement
+        $stmt->execute([$course_name]);
+
+        // Fetch the count of rows and its values and assign to $count
+        $count = $stmt->fetchColumn();
+
+        // Check if the count is greater than 0 and return true if greater than zero, else false
+        return $count > 0;
+    }
+
     
 }

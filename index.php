@@ -3,6 +3,10 @@
 // Start the session
 session_start();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 /* Checks if there is a user logged in
 if (!isset($_SESSION['admin_ID'])) {
   
@@ -229,16 +233,16 @@ if (isset($_POST['add_course'])){
   <!-- Add Course Modal -->
   <div class="modal fade" id="addCourseModal" tabindex="-1">
     <div class="modal-dialog">
-      <form class="modal-content" method="POST" action="">
+      <form class="modal-content" id="courseForm" method="POST" action="">
         <div class="modal-header">
           <h5 class="modal-title">Add Course</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <input type="text" name="course_name" class="form-control mb-2" placeholder="Course Name" required>
+          <input type="text" name="course_name" id="course_name" class="form-control mb-2" placeholder="Course Name" required>
         </div>
         <div class="modal-footer">
-          <button type="submit" name="add_course" class="btn btn-success">Add Course</button>
+          <button type="submit" id="course_button" name="add_course" class="btn btn-success">Add Course</button>
         </div>
 
       <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
@@ -278,5 +282,88 @@ if (isset($_POST['add_course'])){
   </div>
 
   <script src="./bootstrap-5.3.3-dist/js/bootstrap.js"></script>
+
+  <script>
+
+  // Function to validate individual fields
+  function validateField(field, validationFn) {
+    field.addEventListener('input', () => {
+      if (validationFn(field.value)) {
+        field.classList.remove('is-invalid');
+        field.classList.add('is-valid');
+      } else {
+        field.classList.remove('is-valid');
+        field.classList.add('is-invalid');
+      }
+    });
+  }
+
+  // Real-time course_name validation using AJAX
+  const checkCourseAvailability = (courseField) => {
+    courseField.addEventListener('input', () => {
+      const course_name = courseField.value.trim();
+
+      if (course_name === '') {
+        courseField.classList.remove('is-valid');
+        courseField.classList.add('is-invalid');
+        courseField.nextElementSibling.textContent = 'Course name is required.';
+        return;
+      }
+
+      // Send AJAX request to check course availability
+      fetch('ajax/check_course.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `course_name=${encodeURIComponent(course_name)}`,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.exists) {
+            courseField.classList.remove('is-valid');
+            courseField.classList.add('is-invalid');
+            courseField.nextElementSibling.textContent = 'Course already exists.';
+            course_button.disabled = true; // Disable the button if course exists
+          } else {
+            courseField.classList.remove('is-invalid');
+            courseField.classList.add('is-valid');
+            courseField.nextElementSibling.textContent = '';
+            course_button.disabled = false; // Enable the button if course does not exist
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  };
+
+  // Get form fields
+  const course_name = document.getElementById('course_name');
+
+  // Attach real-time validation to each field
+  checkCourseAvailability(course_name);
+
+  // Form submission validation
+  document.getElementById('courseForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission for validation
+
+    let isValid = true;
+
+    // Validate all fields on submit
+    [course_name].forEach((field) => {
+      if (!field.classList.contains('is-valid')) {
+        field.classList.add('is-invalid');
+        isValid = false;
+      }
+    });
+
+    // If all fields are valid, submit the form
+    if (isValid) {
+      this.submit();
+    }
+  });
+</script>
+
 </body>
 </html>
