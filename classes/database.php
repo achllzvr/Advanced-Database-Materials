@@ -146,6 +146,5 @@ class database{
         // Check if the count is greater than 0 and return true if greater than zero, else false
         return $count > 0;
     }
-
     
 }

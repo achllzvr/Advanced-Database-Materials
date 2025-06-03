@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-/* Checks if there is a user logged in
+// Checks if there is a user logged in
 if (!isset($_SESSION['admin_ID'])) {
   
   // If not logged in, redirect to login page
@@ -15,7 +15,6 @@ if (!isset($_SESSION['admin_ID'])) {
   exit();
 
 }
-*/
 
 // Connect to Database
 require_once('classes/database.php');
@@ -24,7 +23,7 @@ $con = new database();
 // Initialize a variable to hold the SweetAlert configuration
 $sweetAlertConfig = "";
 
-/* Check if the logout button is clicked
+// Check if the logout button is clicked
   if(isset($_POST['logout'])) {
 
     // Set SweetAlert configuration for logout success
@@ -41,7 +40,6 @@ $sweetAlertConfig = "";
     </script>";
 
   }
-*/
 
 // Check if add student has been clicked
 if (isset($_POST['add_student'])){
