@@ -60,7 +60,7 @@ if(isset($_POST['save'])) {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'User updated successfully.',
+          text: 'Course updated successfully.',
           confirmButtonText: 'Continue'
         }).then(() => {
           window.location.href = 'index.php';
@@ -72,7 +72,7 @@ if(isset($_POST['save'])) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to update user. Please try again.',
+          text: 'Failed to update course. Please try again.',
           confirmButtonText: 'Try Again'
         });
       </script>";
@@ -88,14 +88,14 @@ if(isset($_POST['save'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit User</title>
+  <title>Edit Course</title>
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
   <link rel="stylesheet" href="./package/dist/sweetalert2.css">
 </head>
 
 <body class="bg-light">
   <div class="container py-5">
-    <h2 class="mb-4 text-center">Edit User</h2>
+    <h2 class="mb-4 text-center">Edit Course</h2>
 
     <form method="POST" action="" class="bg-white p-4 rounded shadow-sm">
 
