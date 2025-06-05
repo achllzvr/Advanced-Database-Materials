@@ -10,6 +10,7 @@ class database{
         password: '');
     }
 
+    // Function to signup user (registration.php)
     function signupUser($username, $password, $firstname, $lastname, $email){
         $con = $this->opencon();
 
@@ -30,7 +31,7 @@ class database{
 
     }
 
-    // Check if username exists
+    // Function to check if username exists (registration.php)
     function isUsernameExists($username){
         // Open connection with database
         $con = $this->opencon();
@@ -47,7 +48,7 @@ class database{
         return $count > 0;
     }
 
-    // Check if Email exists
+    // Check if email exists (registration.php)
     function isEmailExists($email){
         // Open connection with database
         $con = $this->opencon();
@@ -64,7 +65,7 @@ class database{
         return $count > 0;
     }
 
-    // Function to login user
+    // Function to login user (login.php)
     function loginUser($username, $password){
 
         // Open connection with database
@@ -90,6 +91,7 @@ class database{
 
     }
 
+    // Function to add a student (index.php)
     function addStudent($firstname, $lastname, $email, $admin_id){
         $con = $this->opencon();
 
@@ -110,6 +112,7 @@ class database{
 
     }
 
+    // Function to add a course (index.php)
     function addCourse($coursename, $admin_id){
         $con = $this->opencon();
 
@@ -130,7 +133,7 @@ class database{
 
     }
 
-    // Check if Email exists
+    // Check if Course exists (index.php)
     function isCourseExists($course_name){
         // Open connection with database
         $con = $this->opencon();
@@ -145,6 +148,59 @@ class database{
 
         // Check if the count is greater than 0 and return true if greater than zero, else false
         return $count > 0;
+    }
+
+    // Function to get all students (index.php)
+    function getStudents(){
+
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to get all students
+        // Fetch all students from the database
+        // Return the result as an associative array
+        return $con->query("SELECT * FROM students")->fetchAll();
+
+    }
+
+    // Function to get student data by ID (update_student.php)
+    function getStudentByID($student_id){
+
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to get student data by ID
+        $stmt = $con->prepare("SELECT * FROM students WHERE student_id = ?");
+        // Execute the statement with the student ID
+        $stmt->execute([$student_id]);
+
+        // Fetch the student data as an associative array
+        $student_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Return the student data
+        return $student_data;
+    }
+
+    // Function to update student data (update_student.php)
+    function updateStudent($student_id, $student_FN, $student_LN, $student_email){
+
+        // Establish Connection with Database
+        $con = $this->opencon();
+
+        try{
+            $con->beginTransaction();
+
+            $query = $con->prepare("UPDATE students SET student_FN = ?, student_LN = ?, student_email = ? WHERE student_id = ?");
+            $query->execute([$student_FN, $student_LN, $student_email, $student_id]);
+
+            $con->commit();
+
+            return true;   
+        }catch (PDOException $e){
+            $con->rollBack();
+            return false;
+        }
+
     }
     
 }

@@ -138,21 +138,85 @@ if (isset($_POST['add_course'])){
           <th>ID</th>
           <th>Full Name</th>
           <th>Email</th>
-          <th>Course</th>
           <th>Actions</th>
         </tr>
       </thead>
+
+      <!-- Table body for students list -->
       <tbody>
+
+        <!-- Fetch students from the database -->
+        <?php
+
+        // Prepare the SQL statement to fetch students
+        $students = $con->getStudents();
+
+        // For each student, create a table row
+        // Assuming $students is an array of associative arrays
+        // Each associative array contains student_ID, student_FN, student_LN, student_email, and course_name
+        foreach($students as $student) {
+        ?>
+
         <tr>
-          <td>1</td>
-          <td>Jei Q. Pastrana</td>
-          <td>jei@example.com</td>
-          <td>DIT</td>
+
+          <!-- student ID placeholder -->
           <td>
-            <button class="btn btn-sm btn-warning">Edit</button>
+
+            <?php
+            // Display student ID
+            echo $student['student_id'];
+            ?>
+
+          </td>
+
+          <!-- student full name placeholder -->
+          <td>
+
+            <?php
+            // Display student name (FN and LN)
+            echo $student['student_FN'] . ' ' . $student['student_LN'];
+            ?>
+
+          </td>
+
+          <!-- student email placeholder -->
+          <td>
+
+            <?php
+            // Display student email
+            echo $student['student_email'];
+            ?>
+
+          </td>
+
+          <!-- Actions placeholder -->
+          <td>
+
+            <!-- Edit/ Update Button -->
+            <div class="btn-group" role="group">
+              <form action="update_student.php" method="POST">
+
+                <!-- student ID hidden input -->
+                <input type="hidden" name="student_id" value="<?php echo $_POST['student_id']=$student['student_id']; ?>">
+
+                <!-- button to redirect to update student page -->
+                <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+
+              </form>
+            </div>
+
             <button class="btn btn-sm btn-danger">Delete</button>
           </td>
+
         </tr>
+
+        <!-- Close the foreach loop -->
+        <?php
+
+        }
+
+        ?>
+
       </tbody>
     </table>
 
