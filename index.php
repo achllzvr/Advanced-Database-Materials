@@ -197,7 +197,7 @@ if (isset($_POST['add_course'])){
               <form action="update_student.php" method="POST">
 
                 <!-- student ID hidden input -->
-                <input type="hidden" name="student_id" value="<?php echo $_POST['student_id']=$student['student_id']; ?>">
+                <input type="hidden" name="student_id" value="<?php echo $student['student_id']; ?>">
 
                 <!-- button to redirect to update student page -->
                 <button type="submit" class="btn btn-sm btn-warning">Edit</button>
@@ -230,15 +230,71 @@ if (isset($_POST['add_course'])){
           <th>Actions</th>
         </tr>
       </thead>
+      <!-- Table body for students list -->
       <tbody>
+
+        <!-- Fetch students from the database -->
+        <?php
+
+        // Prepare the SQL statement to fetch students
+        $courses = $con->getCourses();
+
+        // For each course, create a table row
+        // Assuming $course is an array of associative arrays
+        // Each associative array contains course_id, course_name
+        foreach($courses as $course) {
+        ?>
+
         <tr>
-          <td>1</td>
-          <td>BS Information Technology</td>
+
+          <!-- Course ID placeholder -->
           <td>
-            <button class="btn btn-sm btn-warning">Edit</button>
+
+            <?php
+            // Display Course ID
+            echo $course['course_id'];
+            ?>
+
+          </td>
+
+          <!-- Course name placeholder -->
+          <td>
+
+            <?php
+            // Display Course name
+            echo $course['course_name'];
+            ?>
+
+          </td>
+
+          <!-- Actions placeholder -->
+          <td>
+
+            <!-- Edit/ Update Button -->
+            <div class="btn-group" role="group">
+              <form action="update_course.php" method="POST">
+
+                <!-- Course ID hidden input -->
+                <input type="hidden" name="course_id" value="<?php echo $course['course_id']; ?>">
+
+                <!-- button to redirect to update course page -->
+                <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+
+              </form>
+            </div>
+
             <button class="btn btn-sm btn-danger">Delete</button>
           </td>
+
         </tr>
+
+        <!-- Close the foreach loop -->
+        <?php
+
+        }
+
+        ?>
+
       </tbody>
     </table>
 

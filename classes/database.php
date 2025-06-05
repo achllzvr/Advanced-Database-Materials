@@ -202,5 +202,58 @@ class database{
         }
 
     }
+
+    // Function to get all courses (index.php)
+    function getCourses(){
+
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to get all students
+        // Fetch all courses from the database
+        // Return the result as an associative array
+        return $con->query("SELECT * FROM courses")->fetchAll();
+
+    }
+
+    // Function to get course data by ID (update_course.php)
+    function getCourseByID($course_id){
+
+        // Open connection with database
+        $con = $this->opencon();
+
+        // Prepare SQL statement to get course data by ID
+        $stmt = $con->prepare("SELECT * FROM courses WHERE course_id = ?");
+        // Execute the statement with the course ID
+        $stmt->execute([$course_id]);
+
+        // Fetch the course data as an associative array
+        $course_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Return the course data
+        return $course_data;
+    }
+
+    // Function to update course data (update_course.php)
+    function updateCourse($course_id, $course_name){
+
+        // Establish Connection with Database
+        $con = $this->opencon();
+
+        try{
+            $con->beginTransaction();
+
+            $query = $con->prepare("UPDATE courses SET course_name = ? WHERE course_id = ?");
+            $query->execute([$course_name, $course_id]);
+
+            $con->commit();
+
+            return true;   
+        }catch (PDOException $e){
+            $con->rollBack();
+            return false;
+        }
+
+    }
     
 }
